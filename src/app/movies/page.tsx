@@ -2,10 +2,10 @@
 import { MovieCardPage } from "@/components/movies.card.component";
 import Movie from "@/interfaces/movies.interface";
 import moviesFetcher from "@/services/movies.services";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function MoviesPage() {
+function MoviesContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -174,5 +174,30 @@ export default function MoviesPage() {
         )}
       </section>
     </>
+  );
+}
+
+function MoviesPageFallback() {
+  return (
+    <section className="min-h-screen w-full bg-gradient-to-b from-gray-900 via-black to-gray-800">
+      <div className="flex flex-col items-start justify-start p-4">
+        <h1 className="font-extrabold text-white text-3xl mb-4">Movies</h1>
+        <div className="bg-white h-1 w-[95dvw] rounded-md"></div>
+      </div>
+      <div className="flex justify-center items-center py-20">
+        <div className="flex items-center space-x-2 text-white">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+          <span className="text-lg">Loading movies...</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function MoviesPage() {
+  return (
+    <Suspense fallback={<MoviesPageFallback />}>
+      <MoviesContent />
+    </Suspense>
   );
 }
