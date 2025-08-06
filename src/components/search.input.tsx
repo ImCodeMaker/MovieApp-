@@ -17,7 +17,7 @@ export default function SearchInput() {
   return (
     <input
       type="text"
-      placeholder="Search for movies..."
+      placeholder="Search for movies... Press Enter"
       value={movieName}
       onChange={(e) => setMovieName(e.target.value)}
       onKeyDown={handleKeyDown}
