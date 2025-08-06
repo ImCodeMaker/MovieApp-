@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { navigationItems } from "@/constants/navigation.bar";
 import Link from "next/link";
+import { MoviesProvider } from "@/contexts/moviesContexts";
+import SearchInput from "@/components/search.input"; // componente cliente
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,28 +23,34 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased bg-gray-100 text-gray-900`}>
-        <nav className="bg-black h-16 w-full sticky top-0 z-50 shadow-md">
-          <div className="flex items-center justify-between max-w-screen-xl mx-auto px-6 w-full h-full">
-            <div className="flex items-center space-x-6">
-              <Link href="/" className="text-white text-xl font-bold tracking-wide">
-                MovieHub
-              </Link>
-              {navigationItems.map((item, key) => (
+      <body
+        className={`${inter.variable} antialiased bg-gray-100 text-gray-900`}
+      >
+        <MoviesProvider>
+          <nav className="bg-black h-16 w-full sticky top-0 z-50 shadow-md">
+            <div className="flex items-center justify-between max-w-screen-xl mx-auto px-6 w-full h-full">
+              <div className="flex items-center space-x-6">
                 <Link
-                  key={key}
-                  href={item.href ?? "#"}
-                  className="text-white text-md font-semibold hover:text-blue-400 transition-colors duration-150"
+                  href="/"
+                  className="text-white text-xl font-bold tracking-wide"
                 >
-                  {item.text}
+                  MovieHub
                 </Link>
-              ))}
+                {navigationItems.map((item, key) => (
+                  <Link
+                    key={key}
+                    href={item.href ?? "#"}
+                    className="text-white text-md font-semibold hover:text-blue-400 transition-colors duration-150"
+                  >
+                    {item.text}
+                  </Link>
+                ))}
+                <SearchInput />
+              </div>
             </div>
-
-          </div>
-        </nav>
-
-        <main className="flex-1">{children}</main>
+          </nav>
+          <main className="flex-1">{children}</main>
+        </MoviesProvider>
       </body>
     </html>
   );

@@ -25,7 +25,29 @@ export default async function moviesFetcher(pageNumber: number): Promise<Movie[]
   }
 }
 
-export  async function moviesFetcherById(movie_id: number): Promise<Movie> {
+export async function fetchMovieByQuery(movieQuery: string) : Promise<Movie[]> {
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY; 
+
+  if(!apiKey){
+    throw new Error("You need to provide an API Key")
+  }
+
+  try{
+    const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${movieQuery}`)
+
+    if(!response.ok){
+      throw new Error("An error ocurred fetching this endpoint, try again")
+    }
+
+    const data: MoviesApiResponse = await response.json()
+    return data.results;
+  }
+  catch(error){
+    throw new Error(`${error instanceof Error ? error.message : String(error)}`)
+  }
+}
+
+export async function moviesFetcherById(movie_id: number): Promise<Movie> {
   const apiKey = process.env.NEXT_PUBLIC_API_KEY; 
   if (!apiKey) {
     throw new Error("API key is not defined.");
